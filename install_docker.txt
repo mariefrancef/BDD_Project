@@ -1,0 +1,16 @@
+1. Allumer docker
+2. Construire les conteneurs : docker-compose build
+3. Démarrer les services : docker-compose up
+
+4. Tester les services
+API TypeScript : Accédez à http://localhost:3000 dans un navigateur ou avec un outil comme Postman.
+Base de données PostgreSQL : Connectez-vous avec DBeaver à localhost:5433 en utilisant :
+Utilisateur : myuser
+Mot de passe : mypassword
+Base de données : mydatabase
+
+rentrer dans le container de l'API : docker exec -it typescript_api sh
+lancer index : npx tsx src/index.ts
+
+quand on est dans le container, si on a reset il faut : npm run db:reset 
+puis importer manuellement les données

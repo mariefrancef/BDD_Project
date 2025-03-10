@@ -1,0 +1,29 @@
+{
+  "name": "typescript-api",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && cp -r public dist/",
+    "dev": "NODE_ENV=development npm run build && node --watch ./dist/src/index.js",
+    "db:format": "prisma format",
+    "db:first": "prisma migrate dev --create-only --name init",
+    "db:create-migration": "prisma migrate dev --create-only --name",
+    "db:deploy": "prisma migrate deploy",
+    "db:client-generate": "prisma generate",
+    "db:clean": "prisma migrate reset --force",
+    "db:reset": "npm run db:clean && npm run db:deploy && npm run db:client-generate",
+    "db:force-reset": "rm -rf ./prisma/migrations && npm run db:first && npm run db:clean && npm run db:deploy && npm run db:client-generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.0",
+    "express": "^4.18.2",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "prisma": "^6.4.0",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,31 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Purchases {
+  id        Int       @id @default(autoincrement())
+  sessionId Int       @map("session_id")
+  itemId    Int       @map("item_id")
+  date      DateTime
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  @@map("purchases")
+}
+
+model Sessions {
+  id        Int       @id @default(autoincrement())
+  sessionId Int       @map("session_id")
+  itemId    Int       @map("item_id")
+  date      DateTime
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  @@map("sessions")
+}

@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5433:5432" #5433 par l'extérieur 5432 par défault afin de ne pas obtenir de conflit entre docker et postgree
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - exte1
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: typescript_api
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+      DB_NAME: mydatabase
+    depends_on:
+      - postgres
+    networks:
+      - exte1
+
+volumes:
+  postgres_data:
+
+networks:
+  exte1:
+    driver: bridge
