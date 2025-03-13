@@ -34,6 +34,7 @@ app.post("/recommendations", async (req: any, res: any) => {
       ORDER BY purchased_item, rank;
     `);
 
+    // Corriger le IN de la ligne (WHERE p.item_id IN (${targetItemIds.join(",")}))
     console.log("Résultats bruts de Prisma :", results); // Debugging
 
     // 🔄 Convertir BigInt en Number
@@ -48,6 +49,56 @@ app.post("/recommendations", async (req: any, res: any) => {
     console.error("❌ Erreur lors du traitement :", error);
     res.status(500).json({ error: "Erreur serveur" });
   }
+});
+
+app.get("/recommendations/:purchasedItemId", function (req: any, res: any) {
+  const purchasedItemId = parseInt(req.params.purchasedItemId);
+  console.log("🔎 Produit acheté reçu :", purchasedItemId);
+
+  if (isNaN(purchasedItemId)) {
+    return res
+      .status(400)
+      .json({ error: "L'ID du produit acheté doit être un nombre valide." });
+  }
+
+  prisma
+    .$queryRawUnsafe<
+      { purchased_item: bigint; viewed_item: bigint; view_count: bigint }[]
+    >(
+      `
+      SELECT purchased_item, viewed_item, view_count
+      FROM (
+          SELECT
+              p.item_id AS purchased_item,
+              s.item_id AS viewed_item,
+              COUNT(*) AS view_count,
+              ROW_NUMBER() OVER (PARTITION BY p.item_id ORDER BY COUNT(*) DESC) AS rank
+          FROM public.sessions s
+          JOIN public.purchases p ON s.session_id = p.session_id
+          WHERE p.item_id = ${purchasedItemId}
+          GROUP BY p.item_id, s.item_id
+      ) ranked
+      WHERE rank <= 3
+      ORDER BY purchased_item, rank;
+  `
+    )
+    .then(function (results) {
+      console.log("📊 Résultats SQL :", results);
+
+      const safeResults = results.map(function (row) {
+        return {
+          purchased_item: Number(row.purchased_item),
+          viewed_item: Number(row.viewed_item),
+          view_count: Number(row.view_count),
+        };
+      });
+
+      res.json({ recommendations: safeResults });
+    })
+    .catch(function (error) {
+      console.error("❌ Erreur lors du traitement :", error);
+      res.status(500).json({ error: "Erreur serveur" });
+    });
 });
 
 // Démarrer le serveur
