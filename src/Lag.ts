@@ -2,6 +2,8 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// requete postman : http://localhost:3002/recommandations/lags
+
 (async () => {
   try {
     console.log("Connexion à PostgreSQL...");
@@ -15,7 +17,7 @@ const prisma = new PrismaClient();
     WITH ranked_views AS (
         SELECT 
             p.item_id AS purchased_item,
-            s.item_id AS viewed_item, -- Correction ici
+            s.item_id AS viewed_item,
             ROW_NUMBER() OVER (PARTITION BY p.item_id ORDER BY s.date DESC) AS view_rank
         FROM public.sessions s
         JOIN public.purchases p ON s.session_id = p.session_id
