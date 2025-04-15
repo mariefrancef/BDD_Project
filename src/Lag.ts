@@ -31,6 +31,7 @@ const prisma = new PrismaClient();
             CONCAT( --concat items avant purchase
                 COALESCE(LAG(viewed_item, 1) OVER (PARTITION BY purchased_item ORDER BY view_rank)::TEXT, ''),
                 ', ',
+                --coalesce : évite le null
                 COALESCE(LAG(viewed_item, 2) OVER (PARTITION BY purchased_item ORDER BY view_rank)::TEXT, ''),
                 ', ',
                 COALESCE(LAG(viewed_item, 3) OVER (PARTITION BY purchased_item ORDER BY view_rank)::TEXT, ''),
