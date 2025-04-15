@@ -52,7 +52,7 @@ app.post("/recommandations", async (req: any, res: any) => {
     // Réponse envoyée au client
     res.json({ recommandations: safeResults });
   } catch (error) {
-    console.error("❌ Erreur lors du traitement :", error);
+    console.error("Erreur lors du traitement :", error);
     res.status(500).json({ error: "Erreur serveur" });
   }
 });
@@ -60,7 +60,7 @@ app.post("/recommandations", async (req: any, res: any) => {
 // Route pour obtenir les recommandations pour un seul produit acheté
 app.get("/recommandations/:purchasedItemId", function (req: any, res: any) {
   const purchasedItemId = parseInt(req.params.purchasedItemId);
-  console.log("🔎 Produit acheté reçu :", purchasedItemId);
+  console.log("Produit acheté reçu :", purchasedItemId);
 
   // NaN = Not a Number, donc l'ID doit être un nombre
   if (isNaN(purchasedItemId)) {
@@ -91,7 +91,7 @@ app.get("/recommandations/:purchasedItemId", function (req: any, res: any) {
   `
     )
     .then(function (results) {
-      console.log("📊 Résultats SQL :", results);
+      console.log("Résultats SQL :", results);
 
       // Convertir BigInt en Number
       const safeResults = results.map(function (row) {
@@ -105,7 +105,7 @@ app.get("/recommandations/:purchasedItemId", function (req: any, res: any) {
       res.json({ recommandations: safeResults });
     })
     .catch(function (error) {
-      console.error("❌ Erreur lors du traitement :", error);
+      console.error("Erreur lors du traitement :", error);
       res.status(500).json({ error: "Erreur serveur" });
     });
 });
@@ -113,5 +113,5 @@ app.get("/recommandations/:purchasedItemId", function (req: any, res: any) {
 // Démarrer le serveur
 const PORT = 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
+  console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
