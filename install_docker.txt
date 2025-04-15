@@ -4,7 +4,7 @@
 
 4. Tester les services
 API TypeScript : Accédez à http://localhost:3000 dans un navigateur ou avec un outil comme Postman.
-Base de données PostgreSQL : Connectez-vous avec DBeaver à localhost:5433 en utilisant :
+Base de données PostgreSQL : Connection avec DBeaver à localhost:5433 en utilisant :
 Utilisateur : myuser
 Mot de passe : mypassword
 Base de données : mydatabase

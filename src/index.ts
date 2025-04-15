@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 const express = require("express");
+
+// Prisma : interagir avec la bdd PostgreSQL grâce à une interface en TS
 const prisma = new PrismaClient();
 const app = express();
 app.use(express.json()); // Permet de traiter les requêtes JSON
