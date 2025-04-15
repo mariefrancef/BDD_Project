@@ -5,11 +5,12 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json()); // Permet de traiter les requêtes JSON
 
-// Route pour récupérer les recommandations
+// Route pour récupérer les recommandations de plusieurs produits
 app.post("/recommandations", async (req: any, res: any) => {
   try {
     const { targetItemIds } = req.body;
 
+    // Vérification : targetItemIds doit être un tableau
     if (!targetItemIds || !Array.isArray(targetItemIds)) {
       return res
         .status(400)
@@ -35,6 +36,7 @@ app.post("/recommandations", async (req: any, res: any) => {
 
     console.log("Résultats bruts de Prisma :", results); // Debugging
 
+    // BigInt : entier très grand, utilisé quand un Number n’est pas suffisant.
     // Convertir BigInt en Number
     const safeResults = results.map((row) => ({
       purchased_item: Number(row.purchased_item),
@@ -42,6 +44,7 @@ app.post("/recommandations", async (req: any, res: any) => {
       view_count: Number(row.view_count),
     }));
 
+    // Réponse envoyée au client
     res.json({ recommandations: safeResults });
   } catch (error) {
     console.error("❌ Erreur lors du traitement :", error);
@@ -49,10 +52,12 @@ app.post("/recommandations", async (req: any, res: any) => {
   }
 });
 
+// Route pour obtenir les recommandations pour un seul produit acheté
 app.get("/recommandations/:purchasedItemId", function (req: any, res: any) {
   const purchasedItemId = parseInt(req.params.purchasedItemId);
   console.log("🔎 Produit acheté reçu :", purchasedItemId);
 
+  // NaN = Not a Number, donc l'ID doit être un nombre
   if (isNaN(purchasedItemId)) {
     return res
       .status(400)
