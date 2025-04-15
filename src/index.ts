@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json()); // Permet de traiter les requêtes JSON
 
+// requete postman : Get http://localhost:3001/recommendations body : {"Recommendation": []}
+// requete postman : Post http://localhost:3001/recommendations/id body  {"targetItemIds": [434, 419, 697, 853, 717]}
+
 // Route pour récupérer les recommandations de plusieurs produits
 app.post("/recommandations", async (req: any, res: any) => {
   try {
